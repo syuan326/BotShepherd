@@ -93,6 +93,10 @@ class CommandHandler:
             if not response:
                 return None
             
+            # 允许指令直接返回 API 请求（用于高级插件场景，如撤回消息）
+            if isinstance(response.data, dict) and isinstance(response.data.get("api_request"), dict):
+                return response.data["api_request"]
+
             # 生成回复消息
             return await self._generate_reply(event, response)
             
